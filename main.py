@@ -1,3 +1,9 @@
+"""
+Generador de Árboles de Derivación (Estilo Académico Tradicional)
+Temática 24: Configuración de Infraestructura Virtual
+Estudiante: Juan Pablo López Buitrago
+"""
+
 import sys
 import os
 
@@ -7,8 +13,10 @@ class Nodo:
         self.hijos = []
 
     def imprimir_arbol(self, nivel=0):
-        indent = "  " * nivel
-        print(f"{indent}- {self.simbolo}")
+        # Estilo de líneas jerárquicas limpias tipo árbol sintáctico
+        conector = "└── " if nivel > 0 else ""
+        indent = "    " * (nivel - 1) + conector if nivel > 0 else ""
+        print(f"{indent}{self.simbolo}")
         for hijo in self.hijos:
             hijo.imprimir_arbol(nivel + 1)
 
@@ -37,64 +45,44 @@ def cargar_gramatica(ruta_archivo):
 def cargar_derivacion(ruta_archivo):
     with open(ruta_archivo, 'r', encoding='utf-8') as f:
         lineas = [l.strip() for l in f if l.strip() and not l.startswith('#')]
-    modo = lineas[0].lower()  # 'izquierda' o 'derecha'
+    modo = lineas[0].lower()
     pasos = lineas[1:]
     return modo, pasos
-
-def es_no_terminal(simbolo, no_terminales):
-    return simbolo in no_terminales
 
 def simular_derivacion(simbolo_inicial, producciones, modo, pasos):
     no_terminales = set(producciones.keys())
     raiz = Nodo(simbolo_inicial)
     frontera = [raiz]
 
-    print(f"--- Iniciando simulación (Modo: {modo}) ---")
-
     for i, regla_str in enumerate(pasos):
         if '->' in regla_str:
             izq, der = regla_str.split('->')
-            izq = izq.strip()
             der_simbolos = der.strip().split()
         else:
             der_simbolos = regla_str.split()
-            izq = None
 
         nodo_a_expandir = None
         indice_a_expandir = -1
 
         if modo == 'izquierda':
             for idx, nodo in enumerate(frontera):
-                if es_no_terminal(nodo.simbolo, no_terminales):
+                if nodo.simbolo in no_terminales:
                     nodo_a_expandir = nodo
                     indice_a_expandir = idx
                     break
         elif modo == 'derecha':
             for idx in range(len(frontera) - 1, -1, -1):
-                if es_no_terminal(frontera[idx].simbolo, no_terminales):
+                if frontera[idx].simbolo in no_terminales:
                     nodo_a_expandir = frontera[idx]
                     indice_a_expandir = idx
                     break
 
         if not nodo_a_expandir:
-            print(f"Error en paso {i+1}: No se encontró ningún no terminal para expandir en la frontera.")
             return None
 
-        simbolo_nt = nodo_a_expandir.simbolo
-        simbolos_expansion = der_simbolos
-
-        nuevos_hijos = [Nodo(s) for s in simbolos_expansion]
+        nuevos_hijos = [Nodo(s) for s in der_simbolos]
         nodo_a_expandir.hijos = nuevos_hijos
         frontera[indice_a_expandir:indice_a_expandir+1] = nuevos_hijos
-
-        sentencial_actual = " ".join([n.simbolo for n in frontera])
-        print(f"Paso {i+1} ({simbolo_nt} -> {' '.join(simbolos_expansion)}): {sentencial_actual}")
-
-    restantes = [n.simbolo for n in frontera if es_no_terminal(n.simbolo, no_terminales)]
-    if restantes:
-        print(f"Advertencia: Aún quedan no terminales sin expandir: {restantes}")
-    else:
-        print("¡Derivación completada con éxito!")
 
     return raiz
 
@@ -107,17 +95,8 @@ def extraer_cadena(nodo):
     return cadena
 
 def main():
-    if len(sys.argv) >= 3:
-        archivo_gramatica = sys.argv[1]
-        archivo_derivacion = sys.argv[2]
-    else:
-        archivo_gramatica = "gramatica.txt"
-        archivo_derivacion = "derivacion_w1.txt"
-        print(f"Usando archivos por defecto: {archivo_gramatica} y {archivo_derivacion}\n")
-
-    if not os.path.exists(archivo_gramatica) or not os.path.exists(archivo_derivacion):
-        print(f"Error: No se encuentran los archivos '{archivo_gramatica}' o '{archivo_derivacion}'.")
-        return
+    archivo_gramatica = sys.argv[1] if len(sys.argv) >= 3 else "gramatica.txt"
+    archivo_derivacion = sys.argv[2] if len(sys.argv) >= 3 else "derivacion_w1.txt"
 
     simbolo_inicial, producciones = cargar_gramatica(archivo_gramatica)
     modo, pasos = cargar_derivacion(archivo_derivacion)
@@ -125,7 +104,7 @@ def main():
     raiz = simular_derivacion(simbolo_inicial, producciones, modo, pasos)
 
     if raiz:
-        print("\n=== ÁRBOL DE DERIVACIÓN JERÁRQUICO ===")
+        print("=== ÁRBOL DE DERIVACIÓN (ESTILO SINTÁCTICO) ===")
         raiz.imprimir_arbol()
 
         cadena_tokens = extraer_cadena(raiz)
