@@ -1,3 +1,9 @@
+"""
+Generador de Árboles de Derivación (Estilo Académico Tradicional)
+Temática 24: Configuración de Infraestructura Virtual
+Estudiante: Juan Pablo López Buitrago
+"""
+
 import sys
 class Nodo:
     def __init__(self, simbolo):
