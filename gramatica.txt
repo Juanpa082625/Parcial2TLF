@@ -1,0 +1,9 @@
+# Gramática GIC - Configuración de Infraestructura Virtual (Temática 24)
+Infra -> Infra Maquina | Maquina
+Maquina -> maquina Nombre { cpu = Numero ; memoria = Numero Unidad ; almacenamiento = Discos ; }
+Nombre -> web | db | app | cache
+Discos -> Disco , Discos | Disco
+Disco -> disco Numero Unidad Tipo
+Tipo -> ssd | hdd
+Unidad -> GB | TB
+Numero -> 1 | 2 | 4 | 8 | 16 | 32 | 64 | 128 | 256 | 512

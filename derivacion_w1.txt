@@ -1,0 +1,17 @@
+izquierda
+Infra -> Maquina
+Maquina -> maquina Nombre { cpu = Numero ; memoria = Numero Unidad ; almacenamiento = Discos ; }
+Nombre -> web
+Numero -> 4
+Numero -> 8
+Unidad -> GB
+Discos -> Disco , Discos
+Disco -> disco Numero Unidad Tipo
+Numero -> 128
+Unidad -> GB
+Tipo -> ssd
+Discos -> Disco
+Disco -> disco Numero Unidad Tipo
+Numero -> 1
+Unidad -> TB
+Tipo -> hdd
