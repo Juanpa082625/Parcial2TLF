@@ -1,5 +1,5 @@
 """
-Generador de Árboles de Derivación (Estilo Académico Tradicional)
+Generador de Árboles de Derivación
 Temática 24: Configuración de Infraestructura Virtual
 Estudiante: Juan Pablo López Buitrago
 """
