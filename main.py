@@ -1,6 +1,4 @@
 import sys
-
-
 class Nodo:
     def __init__(self, simbolo):
         self.simbolo = simbolo
